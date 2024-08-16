@@ -30,7 +30,6 @@ export class TechnicianDataPay {
   @JoinColumn()
   dataRails: TechnicianDataRails;
 
-  // Relaicon con la tabla Technicians
   @OneToOne(() => Technician, (technician) => technician.dataPay)
   technician: Technician;
 

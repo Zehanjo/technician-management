@@ -1,73 +1,129 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Inicio del README
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Proyecto de Gestión de TechnicianDataPay y TechnicianDataBank
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este proyecto se centra en la gestión de los datos de pago y datos bancarios de técnicos, implementando diversas funcionalidades como la creación, actualización, eliminación y validación de estos datos. El proyecto está desarrollado utilizando **NestJS** con **TypeORM** para la gestión de la base de datos.
 
-## Description
+# Configuración de Variables de Entorno para la Base de Datos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este archivo contiene las variables de entorno necesarias para configurar la conexión a la base de datos en tu aplicación.
 
-## Installation
+## Variables de Entorno
 
-```bash
-$ npm install
+Asegúrate de crear un archivo `.env` en la raíz de tu proyecto y agrega las siguientes variables de entorno con los valores correspondientes para tu entorno de base de datos:
+
+```env
+# Configuración de la Base de Datos
+
+# Dirección del servidor de la base de datos
+DB_HOST=localhost
+
+# Puerto en el que el servidor de la base de datos está escuchando
+DB_PORT=port
+
+# Nombre de usuario para conectar a la base de datos
+DB_USERNAME=myuser
+
+# Contraseña para el usuario de la base de datos
+DB_PASSWORD=mypassword
+
+# Nombre de la base de datos a la que conectarse
+DB_DATABASE=mydatabase
 ```
 
-## Running the app
+## Instalación
 
-```bash
-# development
-$ npm run start
+1. Clona este repositorio en tu máquina local.
+    ```bash
+    git clone https://github.com/Zehanjo/technician-management
+    ```
 
-# watch mode
-$ npm run start:dev
+2. Navega hasta la carpeta del proyecto.
+    ```bash
+    cd tu_repositorio
+    ```
 
-# production mode
-$ npm run start:prod
+3. Instala las dependencias necesarias.
+    ```bash
+    npm install
+    ```
+
+4. Configura tu base de datos en el archivo `ormconfig.json` o utilizando variables de entorno.
+
+## Uso
+
+### Scripts de Inicio
+
+- **Desarrollo**: Inicia el servidor en modo desarrollo.
+    ```bash
+    npm run start:dev
+    ```
+
+- **Producción**: Compila y ejecuta el servidor en modo producción.
+    ```bash
+    npm run build
+    npm run start:prod
+    ```
+
+### Uso de Postman
+
+Para interactuar con la API, se recomienda usar **Postman**. A continuación, se muestran ejemplos de cuerpos de solicitud para las operaciones **create** y **update** de **TechnicianDataPay**.
+
+
+#### Crear un Nuevo TechnicianDataPay
+- POST:http://localhost:3000/technician-data-pay
+para crear uno nuevo
+```json
+{
+  "dataBank": {
+    "accountNumber": "723456732",
+    "CCI": "10000000000000004023"
+  }
+}
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+para enlazarlo a uno ya existente
+```json
+{
+  "dataBankId": "439908d1-91b6-47bf-a45d-83c4dff629d7"
+}
 ```
 
-## Support
+para actualizar en caso de que sea necesario *Cabe recalcar cambiar los datos del data bank*
+```json
+{
+  "dataBankId": "439908d1-91b6-47bf-a45d-83c4dff629d7"
+  "dataBank": {
+    "accountNumber": "723456733",
+    "CCI": "10000000000000004323"
+  }
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Obtener todos los datos
 
-## Stay in touch
+- GET: http://localhost:3000/technician-data-pay
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+#### Buscar
 
-Nest is [MIT licensed](LICENSE).
+- GET: http://localhost:3000/technician-data-pay/:id
+
+#### Actualizar
+
+- Para actualizar solo cambiar los datos de dataBank
+- PATCH: http://localhost:3000/technician-data-pay/aab5b54a-4313-4163-8469-e00f147043ef
+
+```json
+{
+  "dataBankId": "439908d1-91b6-47bf-a45d-83c4dff629d7",
+  "dataBank": {
+      "accountNumber": "987654321",
+      "CCI": "10020000000000000023"
+  }
+}
+```
+
+#### Eliminar
+
+- DELETE: http://localhost:3000/technician-data-pay/:id

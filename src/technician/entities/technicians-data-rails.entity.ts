@@ -7,7 +7,7 @@ export class TechnicianDataRails {
   id: string;
 
   @Column({ nullable: false })
-  railNumber: string; // Ejemplo de propiedad; ajusta según lo necesario
+  railNumber: string;
 
   @OneToOne(
     () => TechnicianDataPay,

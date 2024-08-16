@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { TechnicianDataPayService } from './technician-data-pay.service';
-import { CreateTechnicianDataPayDto } from './technician-data-pay-create.dto';
-import { UpdateTechnicianDataPayDto } from './technician-data-pay-update.dto';
+import { CreateTechnicianDataPayDto } from './dto/technician-data-pay-create.dto';
+import { UpdateTechnicianDataPayDto } from './dto/technician-data-pay-update.dto';
 
 @Controller('technician-data-pay')
 export class TechnicianDataPayController {

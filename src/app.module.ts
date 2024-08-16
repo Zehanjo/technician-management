@@ -1,20 +1,28 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TechnicianModule } from './technician/technician.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'monorail.proxy.rlwy.net',
-      port: 39973,
-      username: 'root',
-      password: 'gQIpWHwoChEHhqPjhqzZzxBUdrRUZfyC',
-      database: 'railway',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true, // Hace que las variables de entorno estén disponibles globalmente
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
     }),
     TechnicianModule,
   ],

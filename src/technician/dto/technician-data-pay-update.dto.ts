@@ -1,5 +1,5 @@
 import { IsOptional, IsString, IsUUID } from 'class-validator';
-import { UpdateTechnicianDataBankDto } from './dto/technician-data-bank-update.dto';
+import { UpdateTechnicianDataBankDto } from './technician-data-bank-update.dto';
 
 export class UpdateTechnicianDataPayDto {
   @IsOptional()

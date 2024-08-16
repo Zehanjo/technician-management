@@ -6,8 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { TechnicianDataPay } from './entities/technician-data-pay.entity';
-import { CreateTechnicianDataPayDto } from './technician-data-pay-create.dto';
-import { UpdateTechnicianDataPayDto } from './technician-data-pay-update.dto';
+import { CreateTechnicianDataPayDto } from './dto/technician-data-pay-create.dto';
+import { UpdateTechnicianDataPayDto } from './dto/technician-data-pay-update.dto';
 import { TechnicianDataBank } from './entities/technician-data-bank.entity';
 
 @Injectable()
@@ -15,8 +15,6 @@ export class TechnicianDataPayService {
   constructor(
     @InjectRepository(TechnicianDataPay)
     private readonly technicianDataPayRepository: Repository<TechnicianDataPay>,
-    // @InjectRepository(TechnicianDataPay)
-    // private readonly technicianDataPayRepository: Repository<TechnicianDataPay>,
     @InjectRepository(TechnicianDataBank)
     private readonly technicianDataBankRepository: Repository<TechnicianDataBank>,
   ) {}
@@ -31,13 +29,11 @@ export class TechnicianDataPayService {
 
     if (dataBank) {
       if (dataBankId) {
-        // Si se proporciona un ID para TechnicianDataBank, enlaza con el registro existente
         technicianDataBank = await this.technicianDataBankRepository.findOne({
           where: { id: dataBankId },
         });
 
         if (technicianDataBank) {
-          // Verificar unicidad de accountNumber y CCI si se desea actualizar
           const existingAccountNumber =
             await this.technicianDataBankRepository.findOne({
               where: {
@@ -58,7 +54,6 @@ export class TechnicianDataPayService {
             throw new ConflictException('CCI already exists');
           }
 
-          // Actualiza el registro existente solo si es necesario
           await this.technicianDataBankRepository.update(
             technicianDataBank.id,
             dataBank,
@@ -67,10 +62,7 @@ export class TechnicianDataPayService {
           throw new NotFoundException('TechnicianDataBank not found');
         }
       } else {
-        // Crear un nuevo registro
         technicianDataBank = this.technicianDataBankRepository.create(dataBank);
-
-        // Verificar unicidad de accountNumber y CCI
         const existingAccountNumber =
           await this.technicianDataBankRepository.findOne({
             where: { accountNumber: technicianDataBank.accountNumber },
@@ -91,7 +83,6 @@ export class TechnicianDataPayService {
         await this.technicianDataBankRepository.save(technicianDataBank);
       }
     } else if (dataBankId) {
-      // Solo enlaza el TechnicianDataBank existente si no se proporciona dataBank
       technicianDataBank = await this.technicianDataBankRepository.findOne({
         where: { id: dataBankId },
       });
@@ -101,7 +92,6 @@ export class TechnicianDataPayService {
       }
     }
 
-    // Crear TechnicianDataPay y enlazar con TechnicianDataBank
     const technicianDataPay = this.technicianDataPayRepository.create({
       ...technicianDataPayData,
       dataBank: technicianDataBank,
@@ -123,7 +113,6 @@ export class TechnicianDataPayService {
     const { dataBank, dataBankId, ...technicianDataPayData } =
       updateTechnicianDataPayDto;
 
-    // Verificar si el TechnicianDataPay existe
     const technicianDataPay = await this.technicianDataPayRepository.findOne({
       where: { id },
       relations: ['dataBank'],
@@ -137,13 +126,11 @@ export class TechnicianDataPayService {
 
     if (dataBank) {
       if (dataBankId) {
-        // Actualizar o crear TechnicianDataBank
         technicianDataBank = await this.technicianDataBankRepository.findOne({
           where: { id: dataBankId },
         });
 
         if (technicianDataBank) {
-          // Verificar unicidad de accountNumber y CCI
           const existingAccountNumber =
             await this.technicianDataBankRepository.findOne({
               where: {
@@ -163,18 +150,13 @@ export class TechnicianDataPayService {
           if (existingCCI) {
             throw new ConflictException('CCI already exists');
           }
-
-          // Actualiza el registro existente
           await this.technicianDataBankRepository.update(
             technicianDataBank.id,
             dataBank,
           );
         } else {
-          // Crear un nuevo registro
           technicianDataBank =
             this.technicianDataBankRepository.create(dataBank);
-
-          // Verificar unicidad de accountNumber y CCI
           const existingAccountNumber =
             await this.technicianDataBankRepository.findOne({
               where: { accountNumber: technicianDataBank.accountNumber },
@@ -195,10 +177,8 @@ export class TechnicianDataPayService {
           await this.technicianDataBankRepository.save(technicianDataBank);
         }
       } else {
-        // Crear un nuevo registro
         technicianDataBank = this.technicianDataBankRepository.create(dataBank);
 
-        // Verificar unicidad de accountNumber y CCI
         const existingAccountNumber =
           await this.technicianDataBankRepository.findOne({
             where: { accountNumber: technicianDataBank.accountNumber },
@@ -220,7 +200,6 @@ export class TechnicianDataPayService {
       }
     }
 
-    // Actualizar TechnicianDataPay
     await this.technicianDataPayRepository.update(id, {
       ...technicianDataPayData,
       dataBank: technicianDataBank,
@@ -243,10 +222,9 @@ export class TechnicianDataPayService {
   }
 
   async remove(id: string): Promise<{ message: string }> {
-    // Buscar el TechnicianDataPay antes de eliminarlo
     const technicianDataPay = await this.technicianDataPayRepository.findOne({
       where: { id },
-      relations: ['dataBank'], // Asegúrate de que incluyes las relaciones necesarias
+      relations: ['dataBank'],
     });
 
     if (!technicianDataPay) {
